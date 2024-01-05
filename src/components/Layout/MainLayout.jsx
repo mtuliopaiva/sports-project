@@ -9,15 +9,12 @@ import {
   TrophyOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Dashboard from "../../pages/Dashboard/Dashboard";
+import { BrowserRouter as Router, Link } from "react-router-dom";
+
+import AppRoutes from "../../AppRoutes";
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
-
-const Teams = () => <div>Teams Content</div>;
-const Competitions = () => <div>Competitions Content</div>;
-const Configuration = () => <div>Configuration Content</div>;
 
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -100,12 +97,7 @@ const MainLayout = () => {
               minHeight: "calc(100vh - 128px)",
             }}
           >
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/teams" element={<Teams />} />
-              <Route path="/competitions" element={<Competitions />} />
-              <Route path="/configuration" element={<Configuration />} />
-            </Routes>
+            <AppRoutes />
           </Content>
         </Layout>
       </Layout>
