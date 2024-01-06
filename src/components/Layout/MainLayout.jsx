@@ -23,7 +23,7 @@ const MainLayout = () => {
     <Router>
       <Layout>
         <Sider trigger={null} collapsible collapsed={collapsed}>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]} selectedKeys={["1"]}>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
             {[
               {
                 key: "1",

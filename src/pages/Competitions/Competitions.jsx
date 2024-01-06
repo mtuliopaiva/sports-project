@@ -1,17 +1,13 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "../../services/axiosConfig";
 import { Card, Col, Row, Divider } from "antd";
 import Meta from "antd/es/card/Meta";
 import { Typography } from "antd";
-
+import { Link } from "react-router-dom"; // Importe o Link do react-router-dom
 import { stringToLowerCase } from "../../utils/stringToLowerCase";
 import { formatDate } from "../../utils/formatDate";
 
-const { Text, Link } = Typography;
-const style = {
-  background: '#0092ff',
-  padding: '8px 0',
-};
+const { Text } = Typography;
 
 const apiKey = import.meta.env.VITE_API_KEY;
 
@@ -36,31 +32,32 @@ const Competitions = () => {
 
     fetchData();
   }, []);
+
   return (
     <div>
-    <Divider orientation="left">Competitions</Divider>
-    <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-    {competitions.map((competition) => (
-      <Col key={competition.id} className="gutter-row" span={6}>
-        <div style={{ marginBottom: "20px" }}>
-           <Card
-            hoverable
-            style={{ width: 240 }}
-            cover={<img alt={competition.name} src={competition.emblem} style={{ height: '160px', width: '200px', objectFit: 'cover', margin:'auto'}}/>}
-          >
-
-            <div style={{ display: "flex", flexDirection: "column" }}>
-            <Text>{competition.name}</Text>
-            <Text>{competition.area.name}</Text>
-            <Text type="secondary">{stringToLowerCase(competition.type)}</Text>
-            <Text type="secondary">Last update: {formatDate(competition.lastUpdated)}</Text>
-
+      <Divider orientation="left">Competitions</Divider>
+      <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+        {competitions.map((competition) => (
+          <Col key={competition.id} className="gutter-row" span={6}>
+            <div style={{ marginBottom: "20px" }}>
+              <Link to={`/competition/stats/${competition.id}`}>
+                <Card
+                  hoverable
+                  style={{ width: 240 }}
+                  cover={<img alt={competition.name} src={competition.emblem} style={{ height: '160px', width: '200px', objectFit: 'cover', margin:'auto'}} />}
+                >
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <Text>{competition.name}</Text>
+                    <Text>{competition.area.name}</Text>
+                    <Text type="secondary">{stringToLowerCase(competition.type)}</Text>
+                    <Text type="secondary">Last update: {formatDate(competition.lastUpdated)}</Text>
+                  </div>
+                </Card>
+              </Link>
             </div>
-          </Card>
-        </div>
-        </Col>
-      ))}
-    </Row>
+          </Col>
+        ))}
+      </Row>
     </div>
   );
 };
