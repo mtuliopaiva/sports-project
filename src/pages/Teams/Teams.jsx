@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../services/axiosConfig";
-import { Table, Divider, Form, Select, Button, Space } from "antd";
+import { Table, Divider, Form, Select, Button, Space, Tag } from "antd";
 import { Typography } from "antd";
+import { SearchOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 const { Text } = Typography;
@@ -45,14 +46,41 @@ const Teams = () => {
 
   const columns = [
     {
-      title: "Team ID",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
       title: "Team Name",
       dataIndex: "name",
       key: "name",
+    },
+        {
+      title: "TLA",
+      dataIndex: "tla",
+      key: "tla",
+    },
+    {
+      title: "Colors",
+      dataIndex: "clubColors",
+      key: "clubColors",
+      render: (colors) => (
+        <>
+          {colors.split("/").map((color, index) => (
+            <Tag
+              key={index}
+              color={color.trim().toLowerCase()}
+              style={{ color: color.trim().toLowerCase(), backgroundColor: color.trim().toLowerCase(), border:'1px solid #000' }}
+            >color
+            </Tag>
+          ))}
+        </>
+      ),
+    },
+    {
+      title: "Stadium",
+      dataIndex: "venue",
+      key: "venue",
+    },
+    {
+      title: "Fouded",
+      dataIndex: "founded",
+      key: "founded",
     },
   ];
 
@@ -121,11 +149,12 @@ const Teams = () => {
           }}
         >
           <Space>
-            <Button type="primary" htmlType="submit" loading={loading}>
-              Submit
-            </Button>
+            <Button htmlType="submit" type="primary" loading={loading} icon={<SearchOutlined />}>
+        Search
+      </Button>
           </Space>
         </Form.Item>
+
       </Form>
       {teams.length > 0 && (
   <Table columns={columns} dataSource={teams.map(team => ({ ...team, key: team.id }))} />
