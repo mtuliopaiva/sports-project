@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import axios from "../../services/axiosConfig";
 import { Table, Divider, Tag } from "antd";
 import { Typography } from "antd";
+import { formatDate } from "../../utils/formatDate";
+
 
 import { Button, Card, Flex } from "antd";
 const cardStyle = {
@@ -17,14 +19,16 @@ const { Text } = Typography;
 const apiKey = import.meta.env.VITE_API_KEY;
 
 const TeamStats = () => {
-  const { competitionId } = useParams(); // Obtenha o ID da competição a partir dos parâmetros de rota
+  const { teamId } = useParams();
+  const { competitionId } = useParams();
+
   const [competitionName, setCompetitionName] = useState("");
   const [teamStats, setTeamStats] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`/api/competitions/BSA/teams`, {
+        const response = await axios.get(`/api/competitions/${competitionId}/teams`, {
           headers: {
             "X-AUTH-TOKEN": apiKey,
           },
@@ -38,14 +42,6 @@ const TeamStats = () => {
 
     fetchData();
   }, []);
-
-  // const dataSource = competitionStats
-  //   .filter((season) => season.winner && season.winner.name !== "N/A")
-  //   .map((season) => ({
-  //     key: season.id,
-  //     season: `${season.startDate.slice(0, 4)}-${season.endDate.slice(0, 4)}`,
-  //     winner: season.winner.name,
-  //   }));
 
   const columns = [
     {
@@ -69,10 +65,19 @@ const TeamStats = () => {
       key: "nationality",
     },
   ];
-  const team = teamStats.teams && teamStats.teams[11];
+  const team = teamStats.teams && teamStats.teams[teamId];
   if (!team) {
     return <div>Loading...</div>;
   }
+  const squad = team.squad;
+  const dataSource = squad.map((squad) => ({
+    key: squad.id,
+    position: squad.position,
+    name: squad.name,
+    dateOfBirth: formatDate(squad.dateOfBirth),
+    nationality: squad.nationality,
+  }));
+  console.log(competitionId);
   return (
     <div>
       <Divider orientation="left">Team</Divider>
@@ -111,11 +116,11 @@ const TeamStats = () => {
               ))}
             </Text>
             <Text>{team.venue}</Text>
+            <Text>{team.address}</Text>
           </Flex>
         </Flex>
       </Card>
-      {/* <Table style={{marginTop: "20px"}} columns={columns} dataSource={dataSource} /> */}
-      <Table style={{ marginTop: "20px" }} columns={columns} />
+      <Table style={{marginTop: "20px"}} columns={columns} dataSource={dataSource} />
     </div>
   );
 };

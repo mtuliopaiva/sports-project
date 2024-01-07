@@ -16,7 +16,7 @@ const AppRoutes = () => {
       <Route path="/teams" element={<Teams />} />
       <Route path="/competitions" element={<Competitions />} />
       <Route path="/competition/stats/:competitionId" element={<Stats />} />
-      <Route path="/team/stats/" element={<TeamStats />} />
+      <Route path="/team/stats/:competitionId/:teamId" element={<TeamStats />} />
 
       <Route path="/configuration" element={<Configuration />} />
       <Route path="/teams" element={<Teams />} />

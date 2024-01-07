@@ -49,8 +49,13 @@ const Teams = () => {
       title: "Team Name",
       dataIndex: "name",
       key: "name",
+      render: (text, record, index) => (
+        <a href={`/team/stats/${selectedCompetition.code}/${index}`}>
+          {text}
+        </a>
+      ),
     },
-        {
+    {
       title: "TLA",
       dataIndex: "tla",
       key: "tla",
@@ -78,7 +83,7 @@ const Teams = () => {
       key: "venue",
     },
     {
-      title: "Fouded",
+      title: "Founded",
       dataIndex: "founded",
       key: "founded",
     },
@@ -91,6 +96,7 @@ const Teams = () => {
 
   const onFinish = async () => {
     console.log("Received values of form:", { select: selectedCompetition });
+    console.log(selectedCompetition.code)
 
     try {
       setLoading(true); // Ativando o indicador de carregamento
@@ -103,12 +109,11 @@ const Teams = () => {
 
       console.log("Teams data:", teamsResponse.data);
 
-      // Atualizar o estado com os dados das equipes
       setTeams(teamsResponse.data.teams);
     } catch (error) {
       console.error("Erro na requisição de equipes:", error);
     } finally {
-      setLoading(false); // Desativando o indicador de carregamento, independentemente do resultado
+      setLoading(false);
     }
   };
 
