@@ -2,19 +2,20 @@ import React, { useEffect, useState } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input, message } from "antd";
 import { useAuthentication } from "../../hooks/useAuthentication";
+import { auth } from "../../firebase/config";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
-  const { login } = useAuthentication();
+  const { login, error, loading } = useAuthentication();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const user = {
-      email,
-      password,
-    };
-    const response = await login(user);
+    try{
+      await login(email,password);
+      console.log("Login Realizado com sucesso");
+    } catch{
+      console.error("Authentication error");
+    }
   };
 
   return (

@@ -1,32 +1,25 @@
-import { db } from "../firebase/config";
-
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-
-import { useState, useEffect } from "react";
+// useAuthentication.js
+import { auth } from "../firebase/config"
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useState } from "react";
 
 export const useAuthentication = () => {
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-
-  const auth = getAuth();
-
-  const login = async (data) => {
+  const login = async (email, password) => {
     setLoading(true);
-    setError(false);
-    console.log(data);
-  
+    setError(null);
+
     try {
-      if (!data.email || !data.password) {
+      if (!email || !password) {
         throw new Error("Email and password are required.");
       }
-  
-      await signInWithEmailAndPassword(auth, data.email, data.password);
+
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       console.error("Firebase Authentication Error:", error);
+      setError(error.message);
     } finally {
       setLoading(false);
     }
@@ -35,5 +28,7 @@ export const useAuthentication = () => {
   return {
     auth,
     login,
+    error,
+    loading,
   };
 };

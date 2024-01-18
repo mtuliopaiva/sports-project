@@ -1,12 +1,9 @@
 import './App.css'
-import MainLayout from './components/Layout/MainLayout'
+import Routes from './Routes'
 
 function App() {
 
-  return (
-    <>
-    </>
-  )
+  return (<Routes />)
 }
 
 export default App
