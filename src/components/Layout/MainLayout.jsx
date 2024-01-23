@@ -8,6 +8,8 @@ import {
   Row,
   Col,
   Typography,
+  message,
+  Popconfirm
 } from "antd";
 import {
   MenuFoldOutlined,
@@ -18,6 +20,7 @@ import {
   TrophyOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
+import { auth } from "../../firebase/config";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 
 import Routes from "../../Routes";
@@ -36,6 +39,23 @@ const MainLayout = () => {
 
   const loadingUser = user === undefined;
   console.log(user);
+  const confirmLogout = () => {
+    console.log("Logout confirmado");
+    handleLogout();
+  };
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+      console.log("Logout completed");
+    } catch (error) {
+      console.error("Error", error);
+    }
+  };
+
+  const cancelLogout = () => {
+    console.log("Logout cancelado");
+  };
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       setUser(user);
@@ -76,15 +96,32 @@ const MainLayout = () => {
       key: "5",
       icon: <LogoutOutlined />,
       label: "Logout",
-      link: "/logout",
+      popconfirm: (
+        <Popconfirm
+          title="Are you sure you want to logout?"
+          onConfirm={confirmLogout}
+          onCancel={cancelLogout}
+          okText="Yes"
+          cancelText="No"
+          placement="right"  // ajuste opcional para posicionar o Popconfirm
+        >
+          <Menu.Item
+            key="5"
+            icon={<LogoutOutlined />}
+            style={{ padding: '0' }}  // ajuste opcional para remover o padding padrão
+          >
+            Logout
+          </Menu.Item>
+        </Popconfirm>
+      ),
     },
   ].map((item) => (
     <Menu.Item key={item.key} icon={item.icon}>
-      <Link to={item.link}>{item.label}</Link>
+      {item.popconfirm ? item.popconfirm : <span>{item.label}</span>}
     </Menu.Item>
   ))}
 </Menu>
-        </Sider>
+</Sider>
         <Layout>
           <Header
             style={{
