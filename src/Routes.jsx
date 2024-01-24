@@ -15,6 +15,7 @@ import Competitions from "./pages/Competitions/Competitions";
 import Configuration from "./pages/Configuration/Configuration";
 import Stats from "./pages/Competitions/Stats";
 import Register from "./pages/Register/register";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 
 const App = () => {
   const [user, setUser] = useState(undefined);
@@ -45,6 +46,8 @@ const App = () => {
           <Route path="/configuration" element={<Configuration />} />
         </>
         <Route path="/login" element={<Login />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
+
 
       </Routes>
     </div>

@@ -10,11 +10,6 @@ const Register = () => {
   const auth = getAuth();
   const navigate = useNavigate();
 
-
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
-  };
-
   const handleRegister = async (values) => {
     const { username, password } = values;
     try {
