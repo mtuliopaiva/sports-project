@@ -17,42 +17,37 @@ import Stats from "./pages/Competitions/Stats";
 import Register from "./pages/Register/register";
 
 const App = () => {
-  
-const [user, setUser] = useState(undefined);
-const { auth } = useAuthentication();
+  const [user, setUser] = useState(undefined);
+  const { auth } = useAuthentication();
 
-const loadingUser = user === undefined;
-console.log(user);
-useEffect(() => {
-  onAuthStateChanged(auth, (user) => {
-    setUser(user);
-  });
-}, [auth]);
+  const loadingUser = user === undefined;
+  console.log(user);
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      console.log(user);
+    });
+  }, [auth]);
 
   return (
     <div className="App">
-<Routes>
-      {user ? (
+      <Routes>
         <>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/teams" element={<Teams />} />
           <Route path="/register" element={<Register />} />
           <Route path="/competitions" element={<Competitions />} />
-          <Route
-            path="/competition/stats/:competitionId"
-            element={<Stats />}
-          />
+          <Route path="/competition/stats/:competitionId" element={<Stats />} />
           <Route
             path="/team/stats/:competitionId/:teamId"
             element={<TeamStats />}
           />
           <Route path="/configuration" element={<Configuration />} />
         </>
-      ) : (
         <Route path="/login" element={<Login />} />
-      )}
-    </Routes>
-  </div>
+
+      </Routes>
+    </div>
   );
 };
 

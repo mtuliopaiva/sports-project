@@ -8,8 +8,8 @@ import {
   Row,
   Col,
   Typography,
-  message,
-  Popconfirm
+  Spin,
+  Popconfirm,
 } from "antd";
 import {
   MenuFoldOutlined,
@@ -21,12 +21,11 @@ import {
   TeamOutlined,
 } from "@ant-design/icons";
 import { auth } from "../../firebase/config";
-import { BrowserRouter as Router, Link } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 import Routes from "../../Routes";
 
 import { useAuthentication } from "../../hooks/useAuthentication";
-
+import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 
 const { Header, Sider, Content } = Layout;
@@ -36,17 +35,20 @@ const MainLayout = () => {
   const [user, setUser] = useState(undefined);
   const { auth } = useAuthentication();
   const [collapsed, setCollapsed] = useState(false);
+  const [spinning, setSpinning] = useState(false);
+  const navigate = useNavigate();
 
-  const loadingUser = user === undefined;
-  console.log(user);
   const confirmLogout = () => {
     console.log("Logout confirmado");
     handleLogout();
   };
   const handleLogout = async () => {
     try {
+      setSpinning(true);
       await auth.signOut();
       console.log("Logout completed");
+      setSpinning(false);
+      navigate("/login");
     } catch (error) {
       console.error("Error", error);
     }
@@ -63,65 +65,88 @@ const MainLayout = () => {
   }, [auth]);
 
   return (
-    <Router>
+    <>
+      <Spin spinning={spinning} fullscreen />
       <Layout>
         <Sider trigger={null} collapsible collapsed={collapsed}>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-  {[
-    {
-      key: "1",
-      icon: <UserOutlined />,
-      label: user ? "Dashboard" : "Login", // Altera o rótulo com base na existência do usuário
-      link: user ? "/" : "/login", // Altera o link com base na existência do usuário
-    },
-    {
-      key: "2",
-      icon: <TeamOutlined />,
-      label: "Teams",
-      link: "/teams",
-    },
-    {
-      key: "3",
-      icon: <TrophyOutlined />,
-      label: "Competitions",
-      link: "/competitions",
-    },
-    {
-      key: "4",
-      icon: <SettingOutlined />,
-      label: "Configuration",
-      link: "/configuration",
-    },
-    {
-      key: "5",
-      icon: <LogoutOutlined />,
-      label: "Logout",
-      popconfirm: (
-        <Popconfirm
-          title="Are you sure you want to logout?"
-          onConfirm={confirmLogout}
-          onCancel={cancelLogout}
-          okText="Yes"
-          cancelText="No"
-          placement="right"  // ajuste opcional para posicionar o Popconfirm
-        >
-          <Menu.Item
-            key="5"
-            icon={<LogoutOutlined />}
-            style={{ padding: '0' }}  // ajuste opcional para remover o padding padrão
-          >
-            Logout
-          </Menu.Item>
-        </Popconfirm>
-      ),
-    },
-  ].map((item) => (
-    <Menu.Item key={item.key} icon={item.icon}>
-      {item.popconfirm ? item.popconfirm : <span>{item.label}</span>}
-    </Menu.Item>
-  ))}
-</Menu>
-</Sider>
+          {user && (
+            <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+              {[
+                {
+                  key: "1",
+                  icon: <UserOutlined />,
+                  label: "Dashboard",
+                  link: "/dashboard",
+                },
+                {
+                  key: "2",
+                  icon: <TeamOutlined />,
+                  label: "Teams",
+                  link: "/teams",
+                },
+                {
+                  key: "3",
+                  icon: <TrophyOutlined />,
+                  label: "Competitions",
+                  link: "/competitions",
+                },
+                {
+                  key: "4",
+                  icon: <SettingOutlined />,
+                  label: "Configuration",
+                  link: "/configuration",
+                },
+                {
+                  key: "5",
+                  icon: <LogoutOutlined />,
+                  label: "Logout",
+                  popconfirm: (
+                    <Popconfirm
+                      title="Are you sure you want to logout?"
+                      onConfirm={confirmLogout}
+                      onCancel={cancelLogout}
+                      okText="Yes"
+                      cancelText="No"
+                      placement="right"
+                    >
+                      <Menu.Item key="5" style={{ padding: "0" }}>
+                        Logout
+                      </Menu.Item>
+                    </Popconfirm>
+                  ),
+                },
+              ].map((item) => (
+                <Menu.Item key={item.key} icon={item.icon}>
+                  {item.popconfirm ? (
+                    item.popconfirm
+                  ) : (
+                    <Link to={item.link}>{item.label}</Link>
+                  )}
+                </Menu.Item>
+              ))}
+            </Menu>
+          )}
+          {!user && (
+            <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+              {[
+                {
+                  key: "6",
+                  icon: <UserOutlined />,
+                  label: "Login",
+                  link: "/login",
+                },
+              ].map((item) => (
+                <Menu.Item key={item.key} icon={item.icon}>
+                  {item.popconfirm ? (
+                    item.popconfirm
+                  ) : (
+                    <Link to={item.link}>{item.label}</Link>
+                  )}
+                </Menu.Item>
+              ))}
+            </Menu>
+          )}
+        </Sider>
         <Layout>
           <Header
             style={{
@@ -150,7 +175,7 @@ const MainLayout = () => {
                 style={{ display: "flex", justifyContent: "flex-end" }}
               >
                 <Space wrap size={16} style={{ marginRight: "16px" }}>
-                  <Text>Peter Parker</Text>
+                <Text>{user ? user.email : 'Usuário'}</Text>
                   <Avatar icon={<UserOutlined />} />
                 </Space>
               </Col>
@@ -167,7 +192,7 @@ const MainLayout = () => {
           </Content>
         </Layout>
       </Layout>
-    </Router>
+    </>
   );
 };
 
