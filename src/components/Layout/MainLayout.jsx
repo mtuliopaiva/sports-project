@@ -72,30 +72,31 @@ const MainLayout = () => {
           {user && (
             <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
               {[
-                {
-                  key: "1",
-                  icon: <UserOutlined />,
-                  label: "Dashboard",
-                  link: "/dashboard",
-                },
+                // {
+                //   key: "1",
+                //   icon: <UserOutlined />,
+                //   label: "Dashboard",
+                //   link: "/dashboard",
+                // },
                 {
                   key: "2",
+                  icon: <TrophyOutlined />,
+                  label: "Competitions",
+                  link: "/",
+                },
+                {
+                  key: "3",
                   icon: <TeamOutlined />,
                   label: "Teams",
                   link: "/teams",
                 },
-                {
-                  key: "3",
-                  icon: <TrophyOutlined />,
-                  label: "Competitions",
-                  link: "/competitions",
-                },
-                {
-                  key: "4",
-                  icon: <SettingOutlined />,
-                  label: "Configuration",
-                  link: "/configuration",
-                },
+
+                // {
+                //   key: "4",
+                //   icon: <SettingOutlined />,
+                //   label: "Configuration",
+                //   link: "/configuration",
+                // },
                 {
                   key: "5",
                   icon: <LogoutOutlined />,

@@ -34,10 +34,10 @@ const App = () => {
     <div className="App">
       <Routes>
         <>
-          <Route path="/dashboard" element={<Dashboard />} />
+          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
           <Route path="/teams" element={<Teams />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/competitions" element={<Competitions />} />
+          <Route path="/" element={<Competitions />} />
           <Route path="/competition/stats/:competitionId" element={<Stats />} />
           <Route
             path="/team/stats/:competitionId/:teamId"
